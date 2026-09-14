@@ -1,6 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
   fetchWeather,
   hourLabel,
   searchPlaces,
@@ -10,6 +21,18 @@ import {
   type Place,
   type Weather,
 } from "@/lib/weather";
+import {
+  aqiLabel,
+  defaultDrivers,
+  END_YEAR,
+  everyDecade,
+  fetchAir,
+  impactVerdict,
+  project,
+  type AirData,
+  type Drivers,
+} from "@/lib/climate";
+import { RotatingEarth } from "@/components/RotatingEarth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,6 +80,9 @@ function Index() {
     lon: 88.3639,
   });
   const [wx, setWx] = useState<Weather | null>(null);
+  const [air, setAir] = useState<AirData | null>(null);
+  const [drivers, setDrivers] = useState<Drivers>(() => defaultDrivers(null));
+  const [targetYear, setTargetYear] = useState(2100);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const debounce = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -77,6 +103,24 @@ function Index() {
   useEffect(() => {
     load(place);
   }, [place, load]);
+
+  // live air composition for this place
+  useEffect(() => {
+    let alive = true;
+    setAir(null);
+    fetchAir(place.lat, place.lon)
+      .then((a) => {
+        if (!alive) return;
+        setAir(a);
+        setDrivers(defaultDrivers(a));
+      })
+      .catch(() => {
+        if (alive) setDrivers(defaultDrivers(null));
+      });
+    return () => {
+      alive = false;
+    };
+  }, [place]);
 
   useEffect(() => {
     if (query.trim().length < 2) {
