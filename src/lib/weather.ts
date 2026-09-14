@@ -112,8 +112,8 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
   };
 }
 
-function fmtTime(iso: string) {
-  return iso.slice(11, 16);
+function fmtTime(iso: string | undefined) {
+  return iso ? iso.slice(11, 16) : "--:--";
 }
 
 export function weatherInfo(code: number, isDay = true): { icon: string; label: string } {
