@@ -1,7 +1,7 @@
-# Sanskrit weather identity and richer forecast
+# SKY WATCH and richer forecast
 
 ## What will change
-- Rename **Aether** to **Meghदृष्टि (MeghDrishti)**, meaning “vision of the clouds,” throughout the page and sharing metadata.
+- Rename **Aether** to **SKY WATCH** throughout the page and sharing metadata.
 - Add advanced, understandable insights derived from live conditions: comfort level, wind force, moon phase, golden-hour timing, and an at-a-glance weather summary.
 - Rename **7-day outlook** to **7 Day Forecast** and give it a distinct colourful treatment that remains readable in both day and night skies.
 - Increase weather-responsive animation with layered sky motion, animated forecast cards, moving condition accents, and more expressive sun, moon, cloud, rain, and atmosphere effects.
