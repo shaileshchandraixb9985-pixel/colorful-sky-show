@@ -1,17 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
   fetchWeather,
   hourLabel,
   searchPlaces,
@@ -22,16 +11,12 @@ import {
   type Weather,
 } from "@/lib/weather";
 import {
-  aqiLabel,
   defaultDrivers,
-  END_YEAR,
-  everyDecade,
   fetchAir,
-  impactVerdict,
-  project,
   type AirData,
   type Drivers,
 } from "@/lib/climate";
+import { ClimateLab } from "@/components/ClimateLab";
 import { RotatingEarth } from "@/components/RotatingEarth";
 
 export const Route = createFileRoute("/")({

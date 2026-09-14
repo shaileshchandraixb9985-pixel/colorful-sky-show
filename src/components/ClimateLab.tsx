@@ -56,8 +56,8 @@ export function ClimateLab({
     [drivers, air, latitude],
   );
   const chart = useMemo(() => everyDecade(points), [points]);
-  const target = points.find((p) => p.year === targetYear) ?? points[points.length - 1];
-  const final = points[points.length - 1];
+  const final = points[points.length - 1]!;
+  const target = points.find((p) => p.year === targetYear) ?? final;
   const verdict = impactVerdict(target);
 
   const set = (k: keyof Drivers, v: number) => setDrivers({ ...drivers, [k]: v });
