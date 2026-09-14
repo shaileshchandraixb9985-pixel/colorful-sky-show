@@ -19,6 +19,11 @@
  */
 
 @theme inline {
+  --color-brand: var(--brand);
+  --color-accent-glow: var(--accent-glow);
+  --color-sun: var(--sun);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -26,6 +31,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -63,8 +69,12 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --brand: oklch(0.62 0.19 275);
+  --accent-glow: oklch(0.75 0.19 350);
+  --sun: oklch(0.84 0.13 76);
+
+  --background: oklch(0.22 0.06 290);
+  --foreground: oklch(0.97 0.01 280);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
@@ -141,4 +151,41 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(18px, -26px) scale(1.06); }
+}
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-24px, 22px) scale(1.1); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-40px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility blob-a { animation: float 14s ease-in-out infinite; }
+@utility blob-b { animation: float2 18s ease-in-out infinite; }
+@utility blob-c { animation: float2 20s ease-in-out infinite; }
+@utility spin-slow { animation: spinSlow 40s linear infinite; }
+@utility drift-x { animation: drift 12s ease-in-out infinite; }
+@utility glow-pulse { animation: pulseGlow 5s ease-in-out infinite; }
+@utility rise-in { animation: riseIn 0.6s cubic-bezier(0.32,0.72,0,1) both; }
+
+@utility bg-aurora {
+  background-image: linear-gradient(to bottom right, #1a2150, #3a2f7a, #5b3a8a);
 }
