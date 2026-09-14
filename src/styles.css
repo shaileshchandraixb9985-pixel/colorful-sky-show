@@ -73,8 +73,8 @@
   --accent-glow: oklch(0.75 0.19 350);
   --sun: oklch(0.84 0.13 76);
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.22 0.06 290);
+  --foreground: oklch(0.97 0.01 280);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
