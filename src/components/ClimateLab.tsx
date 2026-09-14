@@ -275,7 +275,7 @@ export function ClimateLab({
 
           {/* charts */}
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            <ChartCard title="Warming at this place (°C)">
+            <ChartCard title={`WARMING AT ${placeName} (°C)`}>
               <AreaChart data={chart}>
                 <defs>
                   <linearGradient id="gTemp" x1="0" y1="0" x2="0" y2="1">
