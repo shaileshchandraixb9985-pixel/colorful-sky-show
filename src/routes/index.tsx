@@ -40,7 +40,7 @@ const QUICK: { name: string; lat: number; lon: number }[] = [
 
 interface Selection {
   name: string;
-  region?: string;
+  region?: string | undefined;
   lat: number;
   lon: number;
 }
