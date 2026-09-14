@@ -14,13 +14,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aether — Weather for anywhere on Earth" },
+      { title: "SKY WATCH — Weather for anywhere on Earth" },
       {
         name: "description",
         content:
           "Search any village, town or city worldwide and see live weather, altitude, pressure, hourly and 7-day forecasts in an animated day or night sky.",
       },
-      { property: "og:title", content: "Aether — Weather for anywhere on Earth" },
+      { property: "og:title", content: "SKY WATCH — Weather for anywhere on Earth" },
       {
         property: "og:description",
         content:
@@ -112,6 +112,7 @@ function Index() {
   const info = wx ? weatherInfo(wx.code, wx.isDay) : null;
   const night = wx ? !wx.isDay : false;
   const raining = !!wx && ((wx.code >= 51 && wx.code <= 67) || (wx.code >= 80 && wx.code <= 99));
+  const advanced = wx ? getAdvancedInsights(wx) : null;
 
   const stars = useMemo(
     () =>
@@ -207,6 +208,9 @@ function Index() {
       )}
 
       <div className="pointer-events-none absolute inset-0 bg-background/10" />
+      <div className="sky-orbit pointer-events-none absolute right-[12%] top-28 size-20 rounded-full border border-foreground/20 opacity-60" />
+      <div className="cloud-sail pointer-events-none absolute top-[42%] text-7xl opacity-30">☁</div>
+      <div className="cloud-sail pointer-events-none absolute top-[68%] text-5xl opacity-20" style={{ animationDelay: "-14s", animationDuration: "34s" }}>☁</div>
 
       {/* header */}
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 pt-8">
@@ -214,7 +218,7 @@ function Index() {
           <div className="bob-y grid size-9 place-items-center rounded-xl bg-foreground/20 text-lg backdrop-blur-md ring-1 ring-foreground/30">
             {night ? "🌙" : "☀"}
           </div>
-          <span className="font-display text-xl font-bold tracking-tight">Aether</span>
+          <span className="font-display text-xl font-bold tracking-tight">SKY WATCH</span>
         </div>
         <span className="rounded-full bg-foreground/10 px-4 py-1.5 text-xs font-medium text-foreground/80 backdrop-blur-md ring-1 ring-foreground/20">
           {loading
@@ -277,11 +281,11 @@ function Index() {
 
         {error && <p className="mt-8 text-center text-sm text-foreground/80">{error}</p>}
 
-        {wx && info && (
+        {wx && info && advanced && (
           <div key={`${place.lat}-${place.lon}`}>
             {/* hero + hourly */}
             <div className="mt-10 grid gap-5 lg:grid-cols-3">
-              <div className="rise-in relative overflow-hidden rounded-3xl bg-foreground/15 p-7 ring-1 ring-foreground/25 backdrop-blur-2xl lg:col-span-2">
+              <div className="rise-in weather-breathe relative overflow-hidden rounded-3xl bg-foreground/15 p-7 ring-1 ring-foreground/25 backdrop-blur-2xl lg:col-span-2">
                 <div className="sheen pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
                 <div
                   className={`glow-pulse absolute -right-10 -top-10 size-44 rounded-full blur-2xl ${
@@ -365,9 +369,29 @@ function Index() {
               </div>
             </div>
 
+            {/* smart insights */}
+            <div
+              className="rise-in mt-5 overflow-hidden rounded-3xl bg-foreground/15 p-6 ring-1 ring-foreground/25 backdrop-blur-2xl"
+              style={{ animationDelay: "100ms" }}
+            >
+              <div className="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <p className="text-xs font-semibold uppercase text-foreground/60">Sky intelligence</p>
+                  <h2 className="mt-1 font-display text-xl font-semibold">{advanced.summary}</h2>
+                </div>
+                <span className="rounded-full bg-foreground/15 px-3 py-1 text-xs text-foreground/80 ring-1 ring-foreground/20">Live analysis</span>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Stat icon="🫧" label="Comfort" value={advanced.comfort} delay={40} />
+                <Stat icon="🍃" label="Wind force" value={advanced.windForce} delay={100} />
+                <Stat icon="🌙" label="Moon phase" value={advanced.moonPhase} delay={160} />
+                <Stat icon="✨" label="Golden hour" value={advanced.goldenHour} delay={220} />
+              </div>
+            </div>
+
             {/* advanced conditions */}
             <div
-              className="rise-in mt-5 rounded-3xl bg-foreground/15 p-6 ring-1 ring-foreground/25 backdrop-blur-2xl"
+              className="rise-in forecast-spectrum mt-5 overflow-hidden rounded-3xl p-6 ring-1 ring-foreground/30 backdrop-blur-2xl"
               style={{ animationDelay: "120ms" }}
             >
               <h2 className="font-display text-base font-semibold">Detailed conditions</h2>
@@ -405,15 +429,18 @@ function Index() {
               className="rise-in mt-5 rounded-3xl bg-foreground/15 p-6 ring-1 ring-foreground/25 backdrop-blur-2xl"
               style={{ animationDelay: "160ms" }}
             >
-              <h2 className="font-display text-base font-semibold">7-day outlook</h2>
+              <div className="flex items-center justify-between gap-4">
+                <h2 className="font-display text-xl font-bold">7 Day Forecast</h2>
+                <span className="sky-orbit text-2xl">✦</span>
+              </div>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
                 {wx.daily.map((d, i) => {
                   const di = weatherInfo(d.code, true);
                   return (
                     <div
                       key={d.date}
-                      className="rise-in rounded-2xl bg-foreground/10 p-4 text-center ring-1 ring-foreground/15 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.03] hover:bg-foreground/20"
-                      style={{ animationDelay: `${180 + i * 40}ms` }}
+                      className="rise-in forecast-wave rounded-2xl bg-foreground/15 p-4 text-center ring-1 ring-foreground/20 transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.05] hover:bg-foreground/25"
+                      style={{ animationDelay: `${180 + i * 180}ms` }}
                     >
                       <p className="text-xs text-foreground/70">
                         {i === 0 ? "Today" : weekday(d.date)}
@@ -436,6 +463,60 @@ function Index() {
       </main>
     </div>
   );
+}
+
+function getAdvancedInsights(wx: Weather) {
+  const comfort = wx.humidity > 78
+    ? "Very humid"
+    : wx.humidity > 62
+      ? "Humid"
+      : wx.feels >= 18 && wx.feels <= 27
+        ? "Comfortable"
+        : wx.feels < 10
+          ? "Chilly"
+          : "Warm";
+  const windForce = wx.wind < 2 ? "Calm" : wx.wind < 12 ? "Light breeze" : wx.wind < 29 ? "Fresh breeze" : wx.wind < 50 ? "Strong wind" : "Gale force";
+  const moonPhase = getMoonPhase(new Date(wx.time));
+  const goldenHour = wx.isDay ? `${subtractHour(wx.sunset)}–${wx.sunset}` : `${wx.sunrise}–${addHour(wx.sunrise)}`;
+  const summary = wx.precip >= 60
+    ? "Keep an umbrella close today"
+    : wx.uv >= 7
+      ? "Strong sunshine — protect your skin"
+      : wx.gusts >= 40
+        ? "A blustery day with powerful gusts"
+        : wx.visibility < 3
+          ? "Low visibility — travel carefully"
+          : `${weatherInfo(wx.code, wx.isDay).label} with ${comfort.toLowerCase()} air`;
+  return { comfort, windForce, moonPhase, goldenHour, summary };
+}
+
+function getMoonPhase(date: Date) {
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14);
+  const lunarCycle = 29.53058867;
+  const age = ((date.getTime() - knownNewMoon) / 86400000) % lunarCycle;
+  const normalized = age < 0 ? age + lunarCycle : age;
+  if (normalized < 1.85 || normalized >= 27.68) return "New moon";
+  if (normalized < 5.54) return "Waxing crescent";
+  if (normalized < 9.23) return "First quarter";
+  if (normalized < 12.92) return "Waxing gibbous";
+  if (normalized < 16.61) return "Full moon";
+  if (normalized < 20.3) return "Waning gibbous";
+  if (normalized < 23.99) return "Last quarter";
+  return "Waning crescent";
+}
+
+function shiftTime(time: string, hours: number) {
+  const [hour = 0, minute = 0] = time.split(":").map(Number);
+  const shifted = (hour + hours + 24) % 24;
+  return `${String(shifted).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+}
+
+function subtractHour(time: string) {
+  return shiftTime(time, -1);
+}
+
+function addHour(time: string) {
+  return shiftTime(time, 1);
 }
 
 function Stat({
