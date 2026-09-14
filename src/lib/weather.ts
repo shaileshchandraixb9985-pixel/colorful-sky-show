@@ -131,6 +131,21 @@ function fmtTime(iso: string | undefined) {
   return iso ? iso.slice(11, 16) : "--:--";
 }
 
+function fmtDuration(seconds: number | undefined) {
+  if (!seconds) return "--";
+  const h = Math.floor(seconds / 3600);
+  const m = Math.round((seconds % 3600) / 60);
+  return `${h}h ${m}m`;
+}
+
+export function uvLabel(uv: number) {
+  if (uv <= 2) return "Low";
+  if (uv <= 5) return "Moderate";
+  if (uv <= 7) return "High";
+  if (uv <= 10) return "Very high";
+  return "Extreme";
+}
+
 export function weatherInfo(code: number, isDay = true): { icon: string; label: string } {
   const day = isDay;
   if (code === 0) return { icon: day ? "☀" : "🌙", label: "Clear sky" };
