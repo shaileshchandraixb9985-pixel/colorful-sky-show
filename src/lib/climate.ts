@@ -113,12 +113,12 @@ export function project(
 ): ProjectionPoint[] {
   let co2 = air?.co2 ?? 425;
   let ch4ppb = (air?.methane ?? 1900) / 0.716; // µg/m³ -> ppb (approx at STP)
-  ch4ppb = clamp(ch4ppb, 1800, 3000);
+  ch4ppb = clamp(ch4ppb, 1850, 2400);
   let forest = 100;
   let pop = 100;
   let seaLevel = 0;
 
-  const latAmp = 1 + Math.min(Math.abs(latitude), 80) / 90; // 1.0 tropics -> ~1.9 poles
+  const latAmp = 1 + Math.min(Math.abs(latitude), 80) / 160; // 1.0 tropics -> 1.5 poles
   const pollutionLoad =
     (drivers.airPollution * 0.5 +
       drivers.landPollution * 0.2 +
@@ -137,7 +137,7 @@ export function project(
       const emissions = 2.45 * drivers.co2 * Math.pow(pop / 100, 0.6);
       co2 += Math.max(emissions * (1 - sink * 0.45), -1);
 
-      const ch4Emit = 9 * drivers.methane * Math.pow(pop / 100, 0.5);
+      const ch4Emit = 100 * drivers.methane * Math.pow(pop / 100, 0.5);
       ch4ppb += ch4Emit - (ch4ppb - 700) / 12; // ~12 year atmospheric lifetime
       ch4ppb = Math.max(700, ch4ppb);
     }
