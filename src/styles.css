@@ -22,6 +22,8 @@
   --color-brand: var(--brand);
   --color-accent-glow: var(--accent-glow);
   --color-sun: var(--sun);
+  --color-forecast: var(--forecast);
+  --color-forecast-glow: var(--forecast-glow);
   --font-display: "Space Grotesk", sans-serif;
   --font-sans: "Inter", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
@@ -72,6 +74,8 @@
   --brand: oklch(0.62 0.19 275);
   --accent-glow: oklch(0.75 0.19 350);
   --sun: oklch(0.84 0.13 76);
+  --forecast: oklch(0.76 0.18 155);
+  --forecast-glow: oklch(0.78 0.17 34);
 
   --background: oklch(0.22 0.06 290);
   --foreground: oklch(0.97 0.01 280);
@@ -212,6 +216,27 @@
   from { opacity: 0; transform: scale(0.9) translateY(10px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+@keyframes skyOrbit {
+  from { transform: rotate(0deg) translateX(16px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(16px) rotate(-360deg); }
+}
+@keyframes cloudSail {
+  0% { transform: translateX(-18vw) scale(0.9); opacity: 0; }
+  12%, 84% { opacity: 0.38; }
+  100% { transform: translateX(112vw) scale(1.08); opacity: 0; }
+}
+@keyframes forecastWave {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+@keyframes shimmerBand {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); filter: saturate(1); }
+  50% { transform: scale(1.035); filter: saturate(1.2); }
+}
 
 @utility twinkle { animation: twinkle 3.4s ease-in-out infinite; }
 @utility fall-rain { animation: fallRain 1.4s linear infinite; }
@@ -219,6 +244,24 @@
 @utility bob-y { animation: bobY 4.5s ease-in-out infinite; }
 @utility sheen { animation: sweep 6s ease-in-out infinite; }
 @utility pop-in { animation: popIn 0.5s cubic-bezier(0.32,0.72,0,1) both; }
+@utility sky-orbit { animation: skyOrbit 9s linear infinite; }
+@utility cloud-sail { animation: cloudSail 28s linear infinite; }
+@utility forecast-wave { animation: forecastWave 4.8s ease-in-out infinite; }
+@utility weather-breathe { animation: breathe 5s ease-in-out infinite; }
+
+@utility forecast-spectrum {
+  background-image: linear-gradient(115deg, color-mix(in oklab, var(--forecast) 38%, transparent), color-mix(in oklab, var(--accent-glow) 28%, transparent), color-mix(in oklab, var(--forecast-glow) 38%, transparent), color-mix(in oklab, var(--forecast) 38%, transparent));
+  background-size: 200% 200%;
+  animation: shimmerBand 10s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 @utility bg-aurora {
   background-image: linear-gradient(to bottom right, #1a2150, #3a2f7a, #5b3a8a);
