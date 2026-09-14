@@ -10,6 +10,14 @@ import {
   type Place,
   type Weather,
 } from "@/lib/weather";
+import {
+  defaultDrivers,
+  fetchAir,
+  type AirData,
+  type Drivers,
+} from "@/lib/climate";
+import { ClimateLab } from "@/components/ClimateLab";
+import { RotatingEarth } from "@/components/RotatingEarth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,6 +65,9 @@ function Index() {
     lon: 88.3639,
   });
   const [wx, setWx] = useState<Weather | null>(null);
+  const [air, setAir] = useState<AirData | null>(null);
+  const [drivers, setDrivers] = useState<Drivers>(() => defaultDrivers(null));
+  const [targetYear, setTargetYear] = useState(2100);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const debounce = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -77,6 +88,24 @@ function Index() {
   useEffect(() => {
     load(place);
   }, [place, load]);
+
+  // live air composition for this place
+  useEffect(() => {
+    let alive = true;
+    setAir(null);
+    fetchAir(place.lat, place.lon)
+      .then((a) => {
+        if (!alive) return;
+        setAir(a);
+        setDrivers(defaultDrivers(a));
+      })
+      .catch(() => {
+        if (alive) setDrivers(defaultDrivers(null));
+      });
+    return () => {
+      alive = false;
+    };
+  }, [place]);
 
   useEffect(() => {
     if (query.trim().length < 2) {
@@ -230,8 +259,9 @@ function Index() {
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-6 pb-16 pt-10">
-        {/* search */}
-        <div ref={searchBox} className="relative mx-auto max-w-xl">
+        {/* search + live Earth */}
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-5">
+        <div ref={searchBox} className="relative w-full max-w-xl">
           <div className="flex items-center gap-3 rounded-full bg-foreground/15 px-5 py-3.5 shadow-2xl shadow-brand/20 backdrop-blur-xl ring-1 ring-foreground/25 focus-within:ring-2 focus-within:ring-foreground/60">
             <span className="text-lg">🔍</span>
             <input
@@ -266,6 +296,9 @@ function Index() {
             </div>
           )}
         </div>
+        <RotatingEarth size={104} night={night} />
+        </div>
+
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {QUICK.map((q) => (
@@ -423,6 +456,17 @@ function Index() {
                 </div>
               </div>
             </div>
+
+            {/* emissions + climate lab */}
+            <ClimateLab
+              air={air}
+              drivers={drivers}
+              setDrivers={setDrivers}
+              latitude={place.lat}
+              placeName={place.name}
+              targetYear={targetYear}
+              setTargetYear={setTargetYear}
+            />
 
             {/* 7-day */}
             <div

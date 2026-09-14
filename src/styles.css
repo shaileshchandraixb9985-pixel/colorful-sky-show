@@ -249,6 +249,12 @@
 @utility forecast-wave { animation: forecastWave 4.8s ease-in-out infinite; }
 @utility weather-breathe { animation: breathe 5s ease-in-out infinite; }
 
+@keyframes earthSpin {
+  from { background-position: 0% 50%; }
+  to { background-position: -200% 50%; }
+}
+@utility earth-spin { animation: earthSpin 32s linear infinite; }
+
 @utility forecast-spectrum {
   background-image: linear-gradient(115deg, color-mix(in oklab, var(--forecast) 38%, transparent), color-mix(in oklab, var(--accent-glow) 28%, transparent), color-mix(in oklab, var(--forecast-glow) 38%, transparent), color-mix(in oklab, var(--forecast) 38%, transparent));
   background-size: 200% 200%;
