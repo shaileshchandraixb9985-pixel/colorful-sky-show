@@ -186,6 +186,50 @@
 @utility glow-pulse { animation: pulseGlow 5s ease-in-out infinite; }
 @utility rise-in { animation: riseIn 0.6s cubic-bezier(0.32,0.72,0,1) both; }
 
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+@keyframes fallRain {
+  from { transform: translateY(-20vh); opacity: 0; }
+  10% { opacity: 0.7; }
+  to { transform: translateY(110vh); opacity: 0; }
+}
+@keyframes shoot {
+  0% { transform: translate(0,0) rotate(20deg); opacity: 0; }
+  10% { opacity: 1; }
+  60%, 100% { transform: translate(420px, 240px) rotate(20deg); opacity: 0; }
+}
+@keyframes bobY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@utility twinkle { animation: twinkle 3.4s ease-in-out infinite; }
+@utility fall-rain { animation: fallRain 1.4s linear infinite; }
+@utility shooting-star { animation: shoot 7s ease-in infinite; }
+@utility bob-y { animation: bobY 4.5s ease-in-out infinite; }
+@utility sheen { animation: sweep 6s ease-in-out infinite; }
+@utility pop-in { animation: popIn 0.5s cubic-bezier(0.32,0.72,0,1) both; }
+
 @utility bg-aurora {
   background-image: linear-gradient(to bottom right, #1a2150, #3a2f7a, #5b3a8a);
+}
+
+/* daytime sky — bright and colourful */
+@utility bg-sky-day {
+  background-image: linear-gradient(to bottom right, #2b6ede, #6aa9f2, #f7b25c);
+}
+
+/* deep night sky */
+@utility bg-sky-night {
+  background-image: linear-gradient(to bottom right, #05060f, #131a3a, #2a1b4d);
 }

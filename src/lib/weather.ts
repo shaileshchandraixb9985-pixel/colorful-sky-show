@@ -34,12 +34,19 @@ export interface Weather {
   humidity: number;
   wind: number;
   windDir: string;
+  gusts: number;
   high: number;
   low: number;
   precip: number;
   uv: number;
   sunrise: string;
   sunset: string;
+  dayLength: string;
+  elevation: number;
+  pressure: number;
+  visibility: number;
+  dewPoint: number;
+  cloudCover: number;
   time: string;
   timezone: string;
   hourly: { time: string; temp: number; code: number; isDay: boolean; precip: number }[];
@@ -59,10 +66,11 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
     latitude: String(lat),
     longitude: String(lon),
     current:
-      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m",
-    hourly: "temperature_2m,weather_code,is_day,precipitation_probability",
+      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,cloud_cover",
+    hourly:
+      "temperature_2m,weather_code,is_day,precipitation_probability,visibility,dew_point_2m",
     daily:
-      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max",
+      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max,daylight_duration",
     timezone: "auto",
     forecast_days: "7",
   });
@@ -93,6 +101,13 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
     humidity: c.relative_humidity_2m,
     wind: Math.round(c.wind_speed_10m),
     windDir: DIRS[Math.round(c.wind_direction_10m / 45) % 8] ?? "N",
+    gusts: Math.round(c.wind_gusts_10m ?? 0),
+    elevation: Math.round(j.elevation ?? 0),
+    pressure: Math.round(c.pressure_msl ?? 0),
+    cloudCover: Math.round(c.cloud_cover ?? 0),
+    visibility: Math.round(((j.hourly.visibility?.[nowIdx] ?? 0) / 1000) * 10) / 10,
+    dewPoint: Math.round(j.hourly.dew_point_2m?.[nowIdx] ?? 0),
+    dayLength: fmtDuration(j.daily.daylight_duration?.[0]),
     high: Math.round(j.daily.temperature_2m_max[0]),
     low: Math.round(j.daily.temperature_2m_min[0]),
     precip: j.daily.precipitation_probability_max?.[0] ?? 0,
@@ -114,6 +129,21 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
 
 function fmtTime(iso: string | undefined) {
   return iso ? iso.slice(11, 16) : "--:--";
+}
+
+function fmtDuration(seconds: number | undefined) {
+  if (!seconds) return "--";
+  const h = Math.floor(seconds / 3600);
+  const m = Math.round((seconds % 3600) / 60);
+  return `${h}h ${m}m`;
+}
+
+export function uvLabel(uv: number) {
+  if (uv <= 2) return "Low";
+  if (uv <= 5) return "Moderate";
+  if (uv <= 7) return "High";
+  if (uv <= 10) return "Very high";
+  return "Extreme";
 }
 
 export function weatherInfo(code: number, isDay = true): { icon: string; label: string } {
