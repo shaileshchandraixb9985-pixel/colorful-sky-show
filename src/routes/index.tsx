@@ -429,8 +429,9 @@ function Index() {
               className="rise-in mt-5 rounded-3xl bg-foreground/15 p-6 ring-1 ring-foreground/25 backdrop-blur-2xl"
               style={{ animationDelay: "160ms" }}
             >
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-forecast via-accent-glow to-forecast-glow" />
               <div className="flex items-center justify-between gap-4">
-                <h2 className="font-display text-xl font-bold">7 Day Forecast</h2>
+                <h2 className="font-display text-xl font-bold text-forecast">7 Day Forecast</h2>
                 <span className="sky-orbit text-2xl">✦</span>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
@@ -439,7 +440,7 @@ function Index() {
                   return (
                     <div
                       key={d.date}
-                      className="rise-in forecast-wave rounded-2xl bg-foreground/15 p-4 text-center ring-1 ring-foreground/20 transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.05] hover:bg-foreground/25"
+                      className="rise-in forecast-wave rounded-2xl bg-background/30 p-4 text-center ring-1 ring-forecast/40 shadow-lg shadow-forecast/10 backdrop-blur-md transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.05] hover:bg-background/45"
                       style={{ animationDelay: `${180 + i * 180}ms` }}
                     >
                       <p className="text-xs text-foreground/70">
