@@ -274,8 +274,9 @@ function Index() {
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-6 pb-16 pt-10">
-        {/* search */}
-        <div ref={searchBox} className="relative mx-auto max-w-xl">
+        {/* search + live Earth */}
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-5">
+        <div ref={searchBox} className="relative w-full max-w-xl">
           <div className="flex items-center gap-3 rounded-full bg-foreground/15 px-5 py-3.5 shadow-2xl shadow-brand/20 backdrop-blur-xl ring-1 ring-foreground/25 focus-within:ring-2 focus-within:ring-foreground/60">
             <span className="text-lg">🔍</span>
             <input
@@ -310,6 +311,9 @@ function Index() {
             </div>
           )}
         </div>
+        <RotatingEarth size={104} night={night} />
+        </div>
+
 
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {QUICK.map((q) => (
@@ -467,6 +471,17 @@ function Index() {
                 </div>
               </div>
             </div>
+
+            {/* emissions + climate lab */}
+            <ClimateLab
+              air={air}
+              drivers={drivers}
+              setDrivers={setDrivers}
+              latitude={place.lat}
+              placeName={place.name}
+              targetYear={targetYear}
+              setTargetYear={setTargetYear}
+            />
 
             {/* 7-day */}
             <div
