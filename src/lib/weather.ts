@@ -92,7 +92,7 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
     isDay: c.is_day === 1,
     humidity: c.relative_humidity_2m,
     wind: Math.round(c.wind_speed_10m),
-    windDir: DIRS[Math.round(c.wind_direction_10m / 45) % 8],
+    windDir: DIRS[Math.round(c.wind_direction_10m / 45) % 8] ?? "N",
     high: Math.round(j.daily.temperature_2m_max[0]),
     low: Math.round(j.daily.temperature_2m_min[0]),
     precip: j.daily.precipitation_probability_max?.[0] ?? 0,
