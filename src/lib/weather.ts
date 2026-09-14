@@ -66,10 +66,11 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
     latitude: String(lat),
     longitude: String(lon),
     current:
-      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m",
-    hourly: "temperature_2m,weather_code,is_day,precipitation_probability",
+      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,cloud_cover",
+    hourly:
+      "temperature_2m,weather_code,is_day,precipitation_probability,visibility,dew_point_2m",
     daily:
-      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max",
+      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max,daylight_duration",
     timezone: "auto",
     forecast_days: "7",
   });
